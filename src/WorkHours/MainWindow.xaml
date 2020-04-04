@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkHours"
         mc:Ignorable="d"
-        Title="MainWindow" Height="134" Width="448" ResizeMode="CanMinimize">
+        Title="MainWindow" Height="130" Width="380">
     <Grid Background="#FF3C1313">
-        <Button Name="StopButton" Content="||" HorizontalAlignment="Left" Padding="0,-14,0,0"  Margin="10,10,0,0" VerticalAlignment="Top" Height="72" Width="72" Click="Button_Click" FontWeight="Bold" FontSize="36" Background="#FFC50C0C" Foreground="#FFEDF0B5"/>
-        <Button Name="PlayButton" Content=">" HorizontalAlignment="Left" Padding="0,-12,0,0"  Margin="10,10,0,0" VerticalAlignment="Top" Height="72" Width="72" Click="Button_Click" FontWeight="Bold" FontSize="48" Foreground="#FFEDF0B5" Background="#FF3B8D0C" BorderBrush="#FF3B8D0C"/>
-        <ProgressBar Name="WorkDayProgress" Margin="104,10,0,0" Value="50" HorizontalAlignment="Left" Width="311" Height="72" VerticalAlignment="Top" Background="#FFC50C0C" BorderBrush="#FFC50C0C" Foreground="#FF3B8D0C"/>
-        <Label Name="WorkHoursLabel" Content="00:00:00" Padding="0,10,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Center"  Margin="104,10,0,0" VerticalAlignment="Top" Foreground="#FFEDF0B5" Width="311" Height="72" FontWeight="Bold" FontSize="36"/>
+        <Button Name="StopButton" Content="||" HorizontalAlignment="Left" Padding="0,-14,0,0"  Margin="10,10,0,0" VerticalAlignment="Top" Height="72" Width="72" Click="StopButton_Click" FontWeight="Bold" FontSize="36" Background="#FFC50C0C" Foreground="#FFEDF0B5"/>
+        <Button Name="PlayButton" Content=">" HorizontalAlignment="Left" Padding="0,-12,0,0"  Margin="10,10,0,0" VerticalAlignment="Top" Height="72" Width="72" Click="PlayButton_Click" FontWeight="Bold" FontSize="48" Foreground="#FFEDF0B5" Background="#FF3B8D0C" BorderBrush="#FF3B8D0C"/>
+        <ProgressBar Name="WorkDayProgress" Margin="104,10,0,0" Value="20" HorizontalAlignment="Left" Width="250" Height="40" VerticalAlignment="Top" Background="#FFC50C0C" BorderBrush="#FFC50C0C" Foreground="#FF3B8D0C"/>
+        <Label Name="WorkHoursLabel" Content="00:00:00" Padding="0,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Center"  Margin="104,10,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Foreground="#FFEDF0B5" Width="250" Height="40" FontWeight="Bold" FontSize="24"/>
+        <Label Name="DateLabel" Content="2020.03.02 Csütörtök" Padding="0,00,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Center"  Margin="104,50,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Foreground="#FFEDF0B5" Width="251" Height="32" FontWeight="Bold" FontSize="20"/>
     </Grid>
 </Window>
