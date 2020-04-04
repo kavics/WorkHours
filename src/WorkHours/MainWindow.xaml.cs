@@ -27,14 +27,14 @@ namespace WorkHours
             StopButton.Visibility = Visibility.Hidden;
             PlayButton.Visibility = Visibility.Visible;
 
-            _dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-            _dispatcherTimer.Tick += DispatcherTimer_Tick;
-            _dispatcherTimer.Interval = TimeSpan.FromSeconds(0.5);
-            _dispatcherTimer.Start();
-
             _playPressedTime = DataHandler.GetWorkStart();
             _workTime = DataHandler.GetWorkHours();
+            _lastTick = DateTime.Now;
 
+            if (_playPressedTime != DateTime.MinValue)
+                StopButton_Click(null, null);
+
+            this.Title = GetStopText();
             if (_playPressedTime != DateTime.MinValue)
                 SetPlayGui();
 
@@ -44,7 +44,11 @@ namespace WorkHours
             SetWorkHoursLabel(_workTime);
             SetDateLabel();
 
-            this.Title = GetStopText();
+            _dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            _dispatcherTimer.Tick += DispatcherTimer_Tick;
+            _dispatcherTimer.Interval = TimeSpan.FromSeconds(0.5);
+            _dispatcherTimer.Start();
+
         }
 
         System.Windows.Threading.DispatcherTimer _dispatcherTimer;
@@ -73,6 +77,7 @@ namespace WorkHours
             _workTime += lastTime;
             this.Title = GetStopText();
             DataHandler.LogStop();
+
             PlayButton.Visibility = Visibility.Visible;
         }
 
@@ -123,5 +128,10 @@ namespace WorkHours
             return "Relaxing...";
         }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if(_playPressedTime != DateTime.MinValue)
+                StopButton_Click(null, null);
+        }
     }
 }
