@@ -55,6 +55,7 @@ namespace WorkHours
         {
             DataHandler.LogStart();
             _playPressedTime = DateTime.Now;
+            SetPlayGui();
         }
         private void SetPlayGui()
         {
