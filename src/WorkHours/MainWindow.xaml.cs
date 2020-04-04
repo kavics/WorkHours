@@ -32,12 +32,18 @@ namespace WorkHours
             _dispatcherTimer.Interval = TimeSpan.FromSeconds(0.5);
             _dispatcherTimer.Start();
 
-            _workTime = GetWorkTime();
+            _playPressedTime = DataHandler.GetWorkStart();
+            _workTime = DataHandler.GetWorkHours();
+
+            if (_playPressedTime != DateTime.MinValue)
+                SetPlayGui();
 
             WorkDayProgress.Minimum = 0;
             WorkDayProgress.Maximum = 8 * 60 * 60;
 
             SetWorkHoursLabel(_workTime);
+            SetDateLabel();
+
             this.Title = GetStopText();
         }
 
@@ -45,43 +51,56 @@ namespace WorkHours
         TimeSpan _workTime;
         DateTime _playPressedTime;
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = (Button)sender;
-            if (button.Name == "PlayButton")
-                PlayClick();
-            if (button.Name == "StopButton")
-                StopClick();
+            DataHandler.LogStart();
+            _playPressedTime = DateTime.Now;
         }
-
-        private void PlayClick()
+        private void SetPlayGui()
         {
             PlayButton.Visibility = Visibility.Hidden;
-
-            _playPressedTime = DateTime.Now;
             this.Title = GetPlayText();
-
             StopButton.Visibility = Visibility.Visible;
         }
 
-        private void StopClick()
+        private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             StopButton.Visibility = Visibility.Hidden;
 
             var lastTime = DateTime.Now - _playPressedTime;
             _playPressedTime = DateTime.MinValue;
             _workTime += lastTime;
-            SetWorkTime(_workTime);
             this.Title = GetStopText();
-
+            DataHandler.LogStop();
             PlayButton.Visibility = Visibility.Visible;
         }
 
+        DateTime _lastTick;
         private void DispatcherTimer_Tick(object sender, EventArgs e)
         {
+            var now = DateTime.Now;
+
+            if (_lastTick.Day != now.Day)
+            {
+                if (_playPressedTime != DateTime.MinValue)
+                {
+                    _playPressedTime = DateTime.Now;
+                    DataHandler.LogDayTransition(_lastTick, now);
+                }
+
+                SetDateLabel();
+            }
+
+            _lastTick = now;
+
             if (_playPressedTime == DateTime.MinValue)
                 return;
-            SetWorkHoursLabel(_workTime + (DateTime.Now - _playPressedTime));
+            SetWorkHoursLabel(_workTime + (now - _playPressedTime));
+        }
+
+        private void SetDateLabel()
+        {
+            DateLabel.Content = DateTime.Now.ToString("yyyy.MM.dd dddd");
         }
 
         private void SetWorkHoursLabel(TimeSpan time)
@@ -103,16 +122,5 @@ namespace WorkHours
             return "Relaxing...";
         }
 
-
-        /* ================================================================ */
-
-        private TimeSpan GetWorkTime()
-        {
-            return new TimeSpan(0, 0, 0);
-        }
-        private void SetWorkTime(TimeSpan time)
-        {
-            // do nothing
-        }
     }
 }
