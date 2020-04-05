@@ -14,11 +14,13 @@ namespace WorkHours
         /// </summary>
         public static DateTime GetWorkStart()
         {
-            var lastStart = GetEvents().LastOrDefault(x => x.Type == EventType.Start);
+            var events = GetEvents();
+
+            var lastStart = events.LastOrDefault(x => x.Type == EventType.Start);
             if (lastStart == null)
                 return DateTime.MinValue;
 
-            var lastStop = GetEvents().LastOrDefault(x => x.Type == EventType.Stop);
+            var lastStop = events.LastOrDefault(x => x.Type == EventType.Stop);
             if (lastStop == null)
                 return lastStart.Time;
 
@@ -33,10 +35,12 @@ namespace WorkHours
         /// </summary>
         public static TimeSpan GetWorkHours()
         {
-            var now = DateTime.Now;
-            var today = new DateTime(now.Year, now.Day, now.Month, 0, 0, 0);
+            var events = GetEvents();
 
-            var todayEvents = GetEvents().Where(x => x.Time >= today).ToArray();
+            var now = DateTime.Now;
+            var today = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+
+            var todayEvents = events.Where(x => x.Time >= today).ToArray();
 
             var time = TimeSpan.Zero;
 
