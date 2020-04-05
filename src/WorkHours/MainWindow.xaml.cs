@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -132,6 +133,19 @@ namespace WorkHours
         {
             if(_playPressedTime != DateTime.MinValue)
                 StopButton_Click(null, null);
+        }
+
+        private void WorkHoursLabel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            OpenLog();
+        }
+        private void DateLabel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            OpenLog();
+        }
+        private void OpenLog()
+        {
+            Process.Start("notepad.exe", DataHandler.GetLogFilePath());
         }
     }
 }

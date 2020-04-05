@@ -144,21 +144,22 @@ namespace WorkHours
 
         private static void LoadFromFile(Action<TextReader> readerCallback)
         {
-            using (var writer = new StreamReader(GetFilePath(), true))
+            using (var writer = new StreamReader(GetLogFilePath(), true))
             {
                 readerCallback(writer);
             }
         }
+
         private static void WriteToFile(Action<TextWriter> writeCallback)
         {
-            using(var writer = new StreamWriter(GetFilePath(), true))
+            using(var writer = new StreamWriter(GetLogFilePath(), true))
             {
                 writeCallback(writer);
             }
         }
 
         private static string _filePath;
-        private static string GetFilePath()
+        internal static string GetLogFilePath()
         {
             if (_filePath == null)
             {
