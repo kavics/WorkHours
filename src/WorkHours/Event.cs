@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
-using System.Text;
 
 namespace WorkHours
 {
@@ -10,6 +9,7 @@ namespace WorkHours
         Unknown, FileCreated, Start, Stop
     }
 
+    [DebuggerDisplay("{ToString()}")]
     internal class Event
     {
         public DateTime Time { get; set; }
@@ -35,6 +35,11 @@ namespace WorkHours
                 type = EventType.Unknown;
 
             return new Event { Time = time, Type = type };
+        }
+
+        public override string ToString()
+        {
+            return $"{Time:yyyy-MM-dd HH:mm:ss}: {Type}";
         }
     }
 }

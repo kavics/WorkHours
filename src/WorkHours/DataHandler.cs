@@ -14,11 +14,13 @@ namespace WorkHours
         /// </summary>
         public static DateTime GetWorkStart()
         {
-            var lastStart = GetEvents().LastOrDefault(x => x.Type == EventType.Start);
+            var events = GetEvents();
+
+            var lastStart = events.LastOrDefault(x => x.Type == EventType.Start);
             if (lastStart == null)
                 return DateTime.MinValue;
 
-            var lastStop = GetEvents().LastOrDefault(x => x.Type == EventType.Stop);
+            var lastStop = events.LastOrDefault(x => x.Type == EventType.Stop);
             if (lastStop == null)
                 return lastStart.Time;
 
@@ -33,10 +35,12 @@ namespace WorkHours
         /// </summary>
         public static TimeSpan GetWorkHours()
         {
-            var now = DateTime.Now;
-            var today = new DateTime(now.Year, now.Day, now.Month, 0, 0, 0);
+            var events = GetEvents();
 
-            var todayEvents = GetEvents().Where(x => x.Time >= today).ToArray();
+            var now = DateTime.Now;
+            var today = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0);
+
+            var todayEvents = events.Where(x => x.Time >= today).ToArray();
 
             var time = TimeSpan.Zero;
 
@@ -140,21 +144,22 @@ namespace WorkHours
 
         private static void LoadFromFile(Action<TextReader> readerCallback)
         {
-            using (var writer = new StreamReader(GetFilePath(), true))
+            using (var writer = new StreamReader(GetLogFilePath(), true))
             {
                 readerCallback(writer);
             }
         }
+
         private static void WriteToFile(Action<TextWriter> writeCallback)
         {
-            using(var writer = new StreamWriter(GetFilePath(), true))
+            using(var writer = new StreamWriter(GetLogFilePath(), true))
             {
                 writeCallback(writer);
             }
         }
 
         private static string _filePath;
-        private static string GetFilePath()
+        internal static string GetLogFilePath()
         {
             if (_filePath == null)
             {
