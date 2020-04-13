@@ -31,6 +31,8 @@ namespace WorkHours
             _playPressedTime = DataHandler.GetWorkStart();
             _workTime = DataHandler.GetWorkHours();
             _lastTick = DateTime.Now;
+            _isHoliday = DataHandler.IsHoliday();
+            DayTypeLabel.Content = _isHoliday ? "Holiday" : "WorkDay";
 
             if (_playPressedTime != DateTime.MinValue)
                 StopButton_Click(null, null);
@@ -52,9 +54,12 @@ namespace WorkHours
 
         }
 
+        private DataHandler DataHandler { get; } = new DataHandler();
+
         System.Windows.Threading.DispatcherTimer _dispatcherTimer;
         TimeSpan _workTime;
         DateTime _playPressedTime;
+        private bool _isHoliday;
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
@@ -122,7 +127,7 @@ namespace WorkHours
 
         private string GetPlayText()
         {
-            return "You are is working.";
+            return "Hard working...";
         }
         private string GetStopText()
         {
@@ -143,9 +148,18 @@ namespace WorkHours
         {
             OpenLog();
         }
+        private void DayTypeLabel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            OpenHolidays();
+        }
+
         private void OpenLog()
         {
             Process.Start("notepad.exe", DataHandler.GetLogFilePath());
+        }
+        private void OpenHolidays()
+        {
+            Process.Start("notepad.exe", DataHandler.GetHolidayFilePath());
         }
     }
 }

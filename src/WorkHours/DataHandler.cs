@@ -12,7 +12,7 @@ namespace WorkHours
         /// Returns last "start" time that is not followed by "stop" time.
         /// Returns DateTime.MinValue if the last time is "stop".
         /// </summary>
-        public static DateTime GetWorkStart()
+        public DateTime GetWorkStart()
         {
             var events = GetEvents();
 
@@ -33,7 +33,7 @@ namespace WorkHours
         /// <summary>
         /// Returns the daily work time.
         /// </summary>
-        public static TimeSpan GetWorkHours()
+        public TimeSpan GetWorkHours()
         {
             var events = GetEvents();
 
@@ -72,7 +72,7 @@ namespace WorkHours
         /// <summary>
         /// Writes day transition events
         /// </summary>
-        public static void LogDayTransition(DateTime stopTime, DateTime startTime)
+        public void LogDayTransition(DateTime stopTime, DateTime startTime)
         {
             AppendEvents(
                 Event.Create(EventType.Stop, stopTime),
@@ -83,7 +83,7 @@ namespace WorkHours
         /// <summary>
         /// Writes a "start" record
         /// </summary>
-        public static void LogStart(DateTime? time = null)
+        public void LogStart(DateTime? time = null)
         {
             AppendEvents(Event.Create(EventType.Start, time));
         }
@@ -91,14 +91,14 @@ namespace WorkHours
         /// <summary>
         /// Writes a "stop" record
         /// </summary>
-        public static void LogStop(DateTime? time = null)
+        public void LogStop(DateTime? time = null)
         {
             AppendEvents(Event.Create(EventType.Stop, time));
         }
 
         /* ========================================================================= READERS AND WRITERS */
 
-        private static void AppendEvents(params Event[] events)
+        private void AppendEvents(params Event[] events)
         {
             WriteToFile(writer =>
             {
@@ -107,20 +107,20 @@ namespace WorkHours
             });
         }
 
-        private static void AppendEvent(TextWriter writer, Event @event)
+        private void AppendEvent(TextWriter writer, Event @event)
         {
             writer.WriteLine($"{@event.Time:yyyy-MM-dd HH:mm:ss.fffff}\t{@event.Type}");
             AddEvent(@event);
         }
 
-        private static List<Event> __events;
-        private static  List<Event> GetEvents()
+        private List<Event> __events;
+        private  List<Event> GetEvents()
         {
             List<Event> LoadEvents()
             {
                 var result = new List<Event>();
 
-                LoadFromFile(reader =>
+                LoadFromFile(GetLogFilePath(), reader =>
                 {
                     string line = null;
                     while ((line = reader.ReadLine()) != null)
@@ -134,23 +134,61 @@ namespace WorkHours
                 __events = LoadEvents();
             return __events;
         }
-        private static void AddEvent(Event @event)
+        private void AddEvent(Event @event)
         {
             if (__events != null)
                 GetEvents().Add(@event);
         }
 
+        /* ================================================================================ HOLIDAYS & DAY TYPE */
+
+        public DayType GetDefaultDayType(DateTime? dateTime = null)
+        {
+            var date = dateTime ?? DateTime.Now;
+            var isWorkday = date.DayOfWeek != DayOfWeek.Saturday && date.DayOfWeek != DayOfWeek.Sunday;
+            return isWorkday ? DayType.WorkDay : DayType.Holiday;
+        }
+
+        private List<Day> __days;
+        private List<Day> GetDays()
+        {
+            List<Day> LoadDays()
+            {
+                var result = new List<Day>();
+
+                LoadFromFile(GetHolidayFilePath(), reader =>
+                {
+                    string line = null;
+                    while ((line = reader.ReadLine()) != null)
+                        result.Add(Day.Parse(line));
+                });
+
+                return result;
+            }
+
+            if (__days == null)
+                __days = LoadDays();
+            return __days;
+        }
+
+        public bool IsHoliday(DateTime? dateTime = null)
+        {
+            var date = (dateTime ?? DateTime.Now).Date;
+            var type = GetDays().FirstOrDefault(x=>x.Date == date)?.Type ?? GetDefaultDayType(date);
+            return type == DayType.Holiday;
+        }
+
         /* ================================================================================ FILE HANDLER */
 
-        private static void LoadFromFile(Action<TextReader> readerCallback)
+        private void LoadFromFile(string path, Action<TextReader> readerCallback)
         {
-            using (var writer = new StreamReader(GetLogFilePath(), true))
+            using (var writer = new StreamReader(path, true))
             {
                 readerCallback(writer);
             }
         }
 
-        private static void WriteToFile(Action<TextWriter> writeCallback)
+        private void WriteToFile(Action<TextWriter> writeCallback)
         {
             using(var writer = new StreamWriter(GetLogFilePath(), true))
             {
@@ -158,24 +196,34 @@ namespace WorkHours
             }
         }
 
-        private static string _filePath;
-        internal static string GetLogFilePath()
+        private string _workDirectoryPath;
+
+        private string GetWorkDirectoryPath()
         {
-            if (_filePath == null)
+            if (_workDirectoryPath == null)
             {
                 var dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
-
-                var path = Path.Combine(dir, "current.log");
-                if (!File.Exists(path))
-                    using (var writer = File.AppendText(path))
-                        AppendEvent(writer, Event.Create(EventType.FileCreated));
-
-                _filePath = path;
+                _workDirectoryPath = dir;
             }
-            return _filePath;
+            return _workDirectoryPath;
         }
-
+        internal string GetLogFilePath()
+        {
+            var path = Path.Combine(GetWorkDirectoryPath(), "current.log");
+            if (!File.Exists(path))
+                using (var writer = File.AppendText(path))
+                    AppendEvent(writer, Event.Create(EventType.FileCreated));
+            return path;
+        }
+        internal string GetHolidayFilePath()
+        {
+            var path = Path.Combine(GetWorkDirectoryPath(), "holidays.txt");
+            if (!File.Exists(path))
+                using (var writer = File.AppendText(path))
+                    writer.WriteLine($"{DateTime.Now:yyyy-MM-dd}\t{GetDefaultDayType()}");
+            return path;
+        }
     }
 }
