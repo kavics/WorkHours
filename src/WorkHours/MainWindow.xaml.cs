@@ -37,7 +37,7 @@ namespace WorkHours
             if (_playPressedTime != DateTime.MinValue)
                 StopButton_Click(null, null);
 
-            this.Title = GetStopText();
+            SetDateLabel();
             if (_playPressedTime != DateTime.MinValue)
                 SetPlayGui();
 
@@ -70,7 +70,7 @@ namespace WorkHours
         private void SetPlayGui()
         {
             PlayButton.Visibility = Visibility.Hidden;
-            this.Title = GetPlayText();
+            SetDateLabel();
             StopButton.Visibility = Visibility.Visible;
         }
 
@@ -81,7 +81,7 @@ namespace WorkHours
             var lastTime = DateTime.Now - _playPressedTime;
             _playPressedTime = DateTime.MinValue;
             _workTime += lastTime;
-            this.Title = GetStopText();
+            SetDateLabel();
             DataHandler.LogStop();
 
             PlayButton.Visibility = Visibility.Visible;
@@ -112,7 +112,8 @@ namespace WorkHours
 
         private void SetDateLabel()
         {
-            DateLabel.Content = DateTime.Now.ToString("yyyy.MM.dd dddd");
+            var text = _playPressedTime == DateTime.MinValue ? GetStopText() : GetPlayText();
+            this.Title = $"{DateTime.Now:yyyy.MM.dd dddd} - {text}";
         }
 
         private void SetWorkHoursLabel(TimeSpan time)
