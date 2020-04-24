@@ -96,6 +96,32 @@ namespace WorkHours
             AppendEvents(Event.Create(EventType.Stop, time));
         }
 
+        public Statistics GetStatistics()
+        {
+            var today = DateTime.Now.Date;
+            var days = new List<WorkDay>();
+            WorkDay day = null;
+            var start = DateTime.MinValue;
+            foreach (var @event in GetEvents())
+            {
+                var eventDate = @event.Time.Date;
+                if (eventDate == today)
+                    break;
+
+                if (day == null || eventDate > day.Date)
+                    days.Add(day = new WorkDay {Date = eventDate, IsHoliday = IsHoliday(@event.Time)});
+
+                if (@event.Type == EventType.Start)
+                    start = @event.Time;
+                if (@event.Type == EventType.Stop)
+                    day.WorkHours+= (@event.Time-start);
+            }
+
+            var statistics = new Statistics {WorkDays = days};
+            statistics.Compute();
+            return statistics;
+        }
+
         /* ========================================================================= READERS AND WRITERS */
 
         private void AppendEvents(params Event[] events)

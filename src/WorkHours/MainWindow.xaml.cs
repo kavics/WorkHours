@@ -28,6 +28,9 @@ namespace WorkHours
             StopButton.Visibility = Visibility.Hidden;
             PlayButton.Visibility = Visibility.Visible;
 
+            var statistics = DataHandler.GetStatistics();
+            StatisticsTextBox.Text = StatisticsToString(statistics);
+
             _playPressedTime = DataHandler.GetWorkStart();
             _workTime = DataHandler.GetWorkHours();
             _lastTick = DateTime.Now;
@@ -52,6 +55,24 @@ namespace WorkHours
             _dispatcherTimer.Interval = TimeSpan.FromSeconds(0.5);
             _dispatcherTimer.Start();
 
+        }
+
+        private string StatisticsToString(Statistics stat)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"Statistics");
+            sb.AppendLine($"----------");
+            sb.AppendLine();
+            sb.AppendLine($"Diff:         {stat.Diff:d'.'hh':'mm':'ss}");
+            sb.AppendLine($"Rate:         {stat.Rate:F3}");
+            sb.AppendLine();
+            sb.AppendLine($"Expectation:  {stat.TotalExpectedWorkTime}");
+            sb.AppendLine($"Work time:    {stat.TotalWorkTime:d'.'hh':'mm':'ss}");
+            sb.AppendLine();
+            sb.AppendLine($"First day:    {stat.WorkDays.FirstOrDefault()?.Date:yyyy-MM-dd}");
+            sb.AppendLine($"Days:         {stat.WorkDays.Count}");
+            sb.AppendLine($"Workdays:     {stat.WorkDays.Count(x=>!x.IsHoliday)}");
+            return sb.ToString();
         }
 
         private DataHandler DataHandler { get; } = new DataHandler();
