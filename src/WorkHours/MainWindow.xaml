@@ -12,6 +12,6 @@
         <ProgressBar Name="WorkDayProgress" Margin="104,10,0,0" Value="20" HorizontalAlignment="Left" Width="250" Height="38" VerticalAlignment="Top" Background="#FFC50C0C" BorderBrush="#FFC50C0C" Foreground="#FF3B8D0C"/>
         <Label Name="WorkHoursLabel" Content="00:00:00" Padding="0,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Center"  Margin="104,10,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Foreground="#FFEDF0B5" Width="126" Height="38" FontWeight="Bold" FontSize="22" MouseDoubleClick="WorkHoursLabel_MouseDoubleClick"/>
         <Label Name="DayTypeLabel" Content="Workday" Padding="0,0,0,0" HorizontalAlignment="Left" HorizontalContentAlignment="Center"  Margin="230,10,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Foreground="#FFEDF0B5" Width="124" Height="38" FontWeight="Bold" FontSize="22" MouseDoubleClick="DayTypeLabel_MouseDoubleClick"/>
-        <TextBox Name="StatisticsTextBox" HorizontalAlignment="Center" Padding="10" Margin="0,62,0,10" Text="Statistics" TextWrapping="Wrap" Width="343" FontFamily="Consolas" FontSize="16" Foreground="#FFEDF0B5" Background="#FF3C1313" BorderBrush="{x:Null}"/>
+        <TextBox Name="StatisticsTextBox" HorizontalAlignment="Center" Padding="10" Margin="0,62,0,10" IsReadOnly="True" Text="Statistics" TextWrapping="Wrap" Width="343" FontFamily="Consolas" FontSize="16" Foreground="#FFEDF0B5" Background="#FF3C1313" BorderBrush="{x:Null}" MouseDoubleClick="StatisticsTextBox_MouseDoubleClick"/>
     </Grid>
 </Window>

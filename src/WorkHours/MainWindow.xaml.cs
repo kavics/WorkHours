@@ -28,8 +28,7 @@ namespace WorkHours
             StopButton.Visibility = Visibility.Hidden;
             PlayButton.Visibility = Visibility.Visible;
 
-            var statistics = DataHandler.GetStatistics();
-            StatisticsTextBox.Text = StatisticsToString(statistics);
+            RefreshStatistics();
 
             _playPressedTime = DataHandler.GetWorkStart();
             _workTime = DataHandler.GetWorkHours();
@@ -174,6 +173,10 @@ namespace WorkHours
         {
             OpenHolidays();
         }
+        private void StatisticsTextBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            RefreshStatistics();
+        }
 
         private void OpenLog()
         {
@@ -183,5 +186,10 @@ namespace WorkHours
         {
             Process.Start("notepad.exe", DataHandler.GetHolidayFilePath());
         }
+        private void RefreshStatistics()
+        {
+            StatisticsTextBox.Text = StatisticsToString(DataHandler.GetStatistics());
+        }
+
     }
 }
