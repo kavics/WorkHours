@@ -102,11 +102,12 @@ namespace WorkHours
             var days = new List<WorkDay>();
             WorkDay day = null;
             var start = DateTime.MinValue;
-            foreach (var @event in GetEvents())
+            var allEvents = GetEvents();
+            foreach (var @event in allEvents)
             {
                 var eventDate = @event.Time.Date;
-                if (eventDate == today)
-                    break;
+                //if (eventDate == today)
+                //    break;
 
                 if (day == null || eventDate > day.Date)
                     days.Add(day = new WorkDay {Date = eventDate, IsHoliday = IsHoliday(@event.Time)});
@@ -115,6 +116,14 @@ namespace WorkHours
                     start = @event.Time;
                 if (@event.Type == EventType.Stop)
                     day.WorkHours+= (@event.Time-start);
+            }
+
+            // Today time correction if working.
+            var lastEvent = allEvents[^1];
+            if (lastEvent.Type == EventType.Start)
+            {
+                var lastDay = days[^1];
+                lastDay.WorkHours += DateTime.Now - lastEvent.Time;
             }
 
             var statistics = new Statistics {WorkDays = days};
