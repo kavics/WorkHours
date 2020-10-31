@@ -8,11 +8,13 @@ namespace WorkHours
     {
         public static TimeSpan ExpectedWorkTimePerWorkDay { get; set; } = TimeSpan.FromHours(6.5d);
         public List<WorkDay> WorkDays { get; set; }
+        public int WorkDayCount { get; private set; }
 
         public TimeSpan TotalExpectedWorkTime { get; private set; }
         public TimeSpan TotalWorkTime { get; private set; }
         public TimeSpan Diff { get; private set; }
         public double Rate { get; private set; }
+        public TimeSpan Average => TimeSpan.FromTicks(TotalWorkTime.Ticks / WorkDayCount);
 
         public void Compute()
         {
@@ -21,7 +23,10 @@ namespace WorkHours
             foreach (var workDay in WorkDays)
             {
                 if (!workDay.IsHoliday)
+                {
                     expected += ExpectedWorkTimePerWorkDay;
+                    WorkDayCount++;
+                }
                 work += workDay.WorkHours;
             }
 

@@ -59,18 +59,24 @@ namespace WorkHours
         private string StatisticsToString(Statistics stat)
         {
             var sb = new StringBuilder();
-            sb.AppendLine($"Statistics");
+            sb.AppendLine($"STATISTICS");
             sb.AppendLine($"----------");
             sb.AppendLine();
-            sb.AppendLine($"Diff:         {stat.Diff:d'.'hh':'mm':'ss}");
-            sb.AppendLine($"Rate:         {stat.Rate:F3}");
+            sb.AppendLine($"WORK TIME PER WORKDAY");
             sb.AppendLine();
-            sb.AppendLine($"Expectation:  {stat.TotalExpectedWorkTime}");
-            sb.AppendLine($"Work time:    {stat.TotalWorkTime:d'.'hh':'mm':'ss}");
+            sb.AppendLine($"Expectation        {Statistics.ExpectedWorkTimePerWorkDay:hh':'mm':'ss}");
+            sb.AppendLine($"Average:           {stat.Average:hh':'mm':'ss}");
+            sb.AppendLine($"Rate:              {stat.Rate:F3}");
             sb.AppendLine();
-            sb.AppendLine($"First day:    {stat.WorkDays.FirstOrDefault()?.Date:yyyy-MM-dd}");
-            sb.AppendLine($"Days:         {stat.WorkDays.Count}");
-            sb.AppendLine($"Workdays:     {stat.WorkDays.Count(x=>!x.IsHoliday)}");
+            sb.AppendLine($"WORK TIME SUMMARY");
+            sb.AppendLine();
+            sb.AppendLine($"Total work time:   {stat.TotalWorkTime:d'.'hh':'mm':'ss}");
+            sb.AppendLine($"Expectation:       {stat.TotalExpectedWorkTime}");
+            sb.AppendLine($"Diff:              {stat.Diff:d'.'hh':'mm':'ss}");
+            sb.AppendLine();
+            sb.AppendLine($"First day:         {stat.WorkDays.FirstOrDefault()?.Date:yyyy-MM-dd}");
+            sb.AppendLine($"Days:              {stat.WorkDays.Count}");
+            sb.AppendLine($"Workdays:          {stat.WorkDayCount}");
             return sb.ToString();
         }
 
