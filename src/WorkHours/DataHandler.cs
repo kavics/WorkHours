@@ -131,6 +131,40 @@ namespace WorkHours
             return statistics;
         }
 
+        public int[] GetHeatMapData()
+        {
+            var map = new int[24 * 60]; // 1440 minutes per day
+            var events = GetEvents();
+            var i0 = 0;
+            var i1 = 0;
+            foreach (var @event in events)
+            {
+                switch (@event.Type)
+                {
+                    case EventType.Unknown:
+                    case EventType.FileCreated:
+                        // do nothing
+                        break;
+                    case EventType.Start:
+                        i0 = GetHeatMapIndex(@event.Time);
+                        break;
+                    case EventType.Stop:
+                        i1 = GetHeatMapIndex(@event.Time);
+                        for (var i = i0; i < i1; i++)
+                            map[i]++;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            return map;
+        }
+        private int GetHeatMapIndex(in DateTime eventTime)
+        {
+            return eventTime.Hour * 60 + eventTime.Minute;
+        }
+
         /* ========================================================================= READERS AND WRITERS */
 
         private void AppendEvents(params Event[] events)
