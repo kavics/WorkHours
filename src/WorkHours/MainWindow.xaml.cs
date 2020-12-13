@@ -58,9 +58,33 @@ namespace WorkHours
 
         private string StatisticsToString(Statistics stat)
         {
+            void AppendLastWorkDay(WorkDay d, StringBuilder s)
+            {
+                s.Append($"{d.Date.DayOfWeek,-9} {(d.IsHoliday?'H':' ')}  {d.WorkHours:hh':'mm':'ss}  ");
+                var diff = d.WorkHours;
+                var isNegative = false;
+                if (!d.IsHoliday)
+                {
+                    isNegative = diff < Statistics.ExpectedWorkTimePerWorkDay;
+                    diff -= Statistics.ExpectedWorkTimePerWorkDay;
+                }
+                s.AppendLine($"{(isNegative?'-':'+')}{diff:hh':'mm':'ss}");
+            }
+
+
             var sb = new StringBuilder();
             sb.AppendLine($"STATISTICS");
             sb.AppendLine($"----------");
+            sb.AppendLine();
+            sb.AppendLine($"LAST SEVEN DAYS");
+            sb.AppendLine();
+            AppendLastWorkDay(stat.WorkDays[^1], sb);
+            AppendLastWorkDay(stat.WorkDays[^2], sb);
+            AppendLastWorkDay(stat.WorkDays[^3], sb);
+            AppendLastWorkDay(stat.WorkDays[^4], sb);
+            AppendLastWorkDay(stat.WorkDays[^5], sb);
+            AppendLastWorkDay(stat.WorkDays[^6], sb);
+            AppendLastWorkDay(stat.WorkDays[^7], sb);
             sb.AppendLine();
             sb.AppendLine($"WORK TIME PER WORKDAY");
             sb.AppendLine();
