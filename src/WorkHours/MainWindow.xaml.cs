@@ -73,6 +73,7 @@ namespace WorkHours
             sb.AppendLine($"Total work time:   {stat.TotalWorkTime:d'.'hh':'mm':'ss}");
             sb.AppendLine($"Expectation:       {stat.TotalExpectedWorkTime}");
             sb.AppendLine($"Diff:              {stat.Diff:d'.'hh':'mm':'ss}");
+            sb.AppendLine($"Diff (workday):    {stat.DiffWd:F3}");
             sb.AppendLine();
             sb.AppendLine($"First day:         {stat.WorkDays.FirstOrDefault()?.Date:yyyy-MM-dd}");
             sb.AppendLine($"Days:              {stat.WorkDays.Count}");
@@ -163,7 +164,7 @@ namespace WorkHours
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if(_playPressedTime != DateTime.MinValue)
+            if (_playPressedTime != DateTime.MinValue)
                 StopButton_Click(null, null);
         }
 
