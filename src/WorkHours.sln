@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkHours", "WorkHours\WorkHours.csproj", "{983FC466-97C9-4512-B15C-C1352C68B6C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkHours", "WorkHours\WorkHours.csproj", "{983FC466-97C9-4512-B15C-C1352C68B6C6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WriteableBitmapDemo", "WriteableBitmapDemo\WriteableBitmapDemo.csproj", "{F374F355-98EA-41A7-A32E-599A88A72298}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{983FC466-97C9-4512-B15C-C1352C68B6C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{983FC466-97C9-4512-B15C-C1352C68B6C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{983FC466-97C9-4512-B15C-C1352C68B6C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F374F355-98EA-41A7-A32E-599A88A72298}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F374F355-98EA-41A7-A32E-599A88A72298}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F374F355-98EA-41A7-A32E-599A88A72298}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F374F355-98EA-41A7-A32E-599A88A72298}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
