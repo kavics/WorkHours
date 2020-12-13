@@ -13,6 +13,7 @@ namespace WorkHours
         public TimeSpan TotalExpectedWorkTime { get; private set; }
         public TimeSpan TotalWorkTime { get; private set; }
         public TimeSpan Diff { get; private set; }
+        public double DiffWd { get; private set; }
         public double Rate { get; private set; }
         public TimeSpan Average => TimeSpan.FromTicks(TotalWorkTime.Ticks / WorkDayCount);
 
@@ -33,6 +34,7 @@ namespace WorkHours
             TotalExpectedWorkTime = expected;
             TotalWorkTime = work;
             Diff = work - expected;
+            DiffWd = Diff.TotalHours / ExpectedWorkTimePerWorkDay.TotalHours;
             Rate = work.TotalHours / expected.TotalHours;
         }
     }
