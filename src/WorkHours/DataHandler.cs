@@ -213,6 +213,14 @@ namespace WorkHours
             return type == DayType.Holiday;
         }
 
+        public string GetDayDescription(DateTime? dateTime = null)
+        {
+            var date = (dateTime ?? DateTime.Now).Date;
+            var day = GetDays().FirstOrDefault(x => x.Date == date);
+            var text = day?.Description ?? GetDefaultDayType(date).ToString();
+            return text;
+        }
+
         /* ================================================================================ FILE HANDLER */
 
         private void LoadFromFile(string path, Action<TextReader> readerCallback)

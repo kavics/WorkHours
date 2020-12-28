@@ -11,6 +11,7 @@ namespace WorkHours
     {
         public DateTime Date { get; set; }
         public DayType Type { get; set; }
+        public string Description { get; set; }
 
         internal static Day Parse(string src)
         {
@@ -19,10 +20,11 @@ namespace WorkHours
             if (!DateTime.TryParse(fields[0], CultureInfo.InvariantCulture, DateTimeStyles.None, out var time))
                 return null;
 
-            if (!Enum.TryParse<DayType>(fields[1], out var type))
-                type = DayType.WorkDay;
+            var desc = fields[1];
+            if (!Enum.TryParse<DayType>(desc, true, out var type))
+                type = DayType.Holiday;
 
-            return new Day() { Date = time, Type = type };
+            return new Day { Date = time, Type = type, Description = desc };
         }
 
         public override string ToString()

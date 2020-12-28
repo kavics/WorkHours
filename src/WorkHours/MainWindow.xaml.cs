@@ -219,7 +219,8 @@ namespace WorkHours
         }
         private void RefreshStatistics()
         {
-            StatisticsTextBox.Text = StatisticsToString(DataHandler.GetStatistics());
+            StatisticsTextBox.Text = $"{DateTime.Now:yyyy-MM-dd dddd} {DataHandler.GetDayDescription()}\r\n\r\n" +
+                                     StatisticsToString(DataHandler.GetStatistics());
         }
 
     }
